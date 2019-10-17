@@ -1,5 +1,3 @@
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Vector;
 
 public class SMovement1D {
@@ -9,6 +7,7 @@ public class SMovement1D {
         MultiMap<Entity, IComponent> commandInputs = ecs.getComponentsPool().get("CCommandInput");
         MultiMap<Entity, IComponent> positions = ecs.getComponentsPool().get("CPosition1D");
         MultiMap<Entity, IComponent> exits = ecs.getComponentsPool().get("CExit");
+
 
         if (commandInputs == null || positions == null)
             return;
@@ -20,24 +19,45 @@ public class SMovement1D {
             if (!commandTag.equals("go"))
                 continue;
 
+            if (args.size() < 1) {
+                ecs.attachComponent(new Entity(), new COutDialog("go where ?"));
+                commandInputs.remove(entityCommand);
+                continue;
+            }
+
             String positionTag = ((CPosition1D)positions.get(entityCommand).toArray()[0]).roomTag;
             boolean commandExecuted = false;
 
             for (Entity exitEntity : exits.keySet()) {
-                String roomTag = ((CExit)exits.get(exitEntity).toArray()[0]).roomTag;
-                String exitTag = ((CExit)exits.get(exitEntity).toArray()[0]).exitTag;
-                String directionTag = ((CExit)exits.get(exitEntity).toArray()[0]).directionTag;
 
-                System.out.println(args.elementAt(0));
-                if (roomTag.equals(positionTag) && args.elementAt(0).equals(directionTag)) {
-                    ((CPosition1D)positions.get(entityCommand).toArray()[0]).roomTag = exitTag;
-                    commandExecuted = true;
-                    ecs.attachComponent(new Entity(), new CDialog("You've gone " + directionTag));
+                for (int i = 0; i < exits.get(exitEntity).size(); i++) {
+
+                    String roomTag = ((CExit) exits.get(exitEntity).toArray()[i]).roomTag;
+                    String exitTag = ((CExit) exits.get(exitEntity).toArray()[i]).exitTag;
+                    String directionTag = ((CExit) exits.get(exitEntity).toArray()[i]).directionTag;
+                    Entity exitID = ((CExit) exits.get(exitEntity).toArray()[i]).exitID;
+
+                    if (roomTag.equals(positionTag) && args.elementAt(0).equals(directionTag)) {
+                        ((CPosition1D) positions.get(entityCommand).toArray()[0]).roomTag = exitTag;
+
+                        commandExecuted = true;
+
+                        String exitDesc = ((CDescription) ecs.getComponentsPool().get("CDescription").get(exitID).toArray()[0]).description;
+
+                        ecs.attachComponent(new Entity(), new COutDialog("You are " + exitDesc));
+
+                        String msg = new String("Exits: ");
+                        for (int it = 0; it < exits.get(exitEntity).size(); it++) {
+                            msg += ((CExit) exits.get(exitEntity).toArray()[it]).directionTag + " ";
+                        }
+                        ecs.attachComponent(new Entity(), new COutDialog(msg));
+                    }
                 }
+
             }
 
             if (!commandExecuted)
-                ecs.attachComponent(new Entity(), new CDialog("Impossible to reach " + args.elementAt(0)));
+                ecs.attachComponent(new Entity(), new COutDialog("There is no door!"));
 
             commandInputs.remove(entityCommand);
         }

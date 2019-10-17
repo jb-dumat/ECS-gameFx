@@ -1,44 +1,64 @@
-import java.util.*;
-import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
-    private static long clock = 0 ;
-
-    public static void restart() {
-        clock = java.lang.System.currentTimeMillis() ;
-    }
-
-    public static long getDuration() {
-        return java.lang.System.currentTimeMillis() - clock;
-    }
-
     public static void main(String[] args) {
         EcsManager ecs = EcsManager.getInstance();
+        SystemManager systemManager = new SystemManager();
         CommandPool cmdPool = CommandPool.getInstance();
-        restart();
+        ExecutorService pool = Executors.newFixedThreadPool(1);
 
-        // Create entity command
-        Vector<String> cVector1 = new Vector<>(), cVector2 = new Vector<>();
-        cVector1.add("north");
-
-        Entity e = ecs.attachComponent(new Entity(), new CCommandInput("go", cVector1));
-
-        cVector2.add("south");
-
-        ecs.attachComponent(e, new CCommandInput("go", cVector2));
-
-        ecs.attachComponent(e, new CPosition1D("room1"));
-
-        ecs.attachComponent(new Entity(), new CExit("room1", "room2", "north"));
+        // Launch Service Loop in ThreadPool
+        pool.execute(systemManager);
 
         // Store new command model
         cmdPool.addCommand("go", 1);
 
-        while (true) {
-            if (getDuration() > 1000) {
-                ecs.update();
-                restart();
-            }
+        // Welcome scene
+        ecs.attachComponent(new Entity(), new COutDialog("Welcome to the world of Zuul!\nWorld of Zuul is a new, incredibly boring adventure game.\nType 'help' if you need help.\n"));
+
+        // Create rooms
+        Entity outside = ecs.attachComponent(new Entity(), new CDescription("outside the main entrance of the university"));
+        Entity theatre = ecs.attachComponent(new Entity(), new CDescription("in a lecture theatre"));
+        Entity pub = ecs.attachComponent(new Entity(), new CDescription("in the campus pub"));
+        Entity lab = ecs.attachComponent(new Entity(), new CDescription("in a computing lab"));
+        Entity office = ecs.attachComponent(new Entity(), new CDescription("in the computing admin office"));
+
+        // Set outside exits
+        ecs.attachComponent(outside, new CExit("outside", "theatre", "east", theatre));
+        ecs.attachComponent(outside, new CExit("outside", "lab", "south", lab));
+        ecs.attachComponent(outside, new CExit("outside", "pub", "west", pub));
+
+        // Set theatre exits
+        ecs.attachComponent(theatre, new CExit("theatre", "outside", "west", outside));
+
+        // Set pub exits
+        ecs.attachComponent(pub, new CExit("pub", "outside", "east", outside));
+
+        // Set lab exits
+        ecs.attachComponent(lab, new CExit("lab", "outside", "north", outside));
+        ecs.attachComponent(lab, new CExit("lab", "office", "east", office));
+
+        // Set office exits
+        ecs.attachComponent(office, new CExit("office", "lab", "west", lab));
+
+        // Create Player
+        Entity player = new Entity();
+        ecs.attachComponent(player, new CPosition1D("outside"));
+        ecs.attachComponent(player, new CPositionHint(outside));
+
+        // Launch game
+        Entity roomHint = ((CPositionHint) ecs.getComponentsPool().get("CPositionHint").get(player).toArray()[0]).positionEntity;
+        ecs.attachComponent(new Entity(), new COutDialog("You are " + ((CDescription) ecs.getComponentsPool().get("CDescription").get(roomHint).toArray()[0]).description));
+
+        // Get exits direction tags
+        String msg = new String("Exits: ");
+        for (int it = 0; it < ecs.getComponentsPool().get("CExit").get(outside).size(); it++) {
+            msg += ((CExit) ecs.getComponentsPool().get("CExit").get(outside).toArray()[it]).directionTag + " ";
         }
+        ecs.attachComponent(new Entity(), new COutDialog(msg));
+
+        // Start the input dialog
+        ecs.attachComponent(new Entity(), new CInDialog(player));
     }
 }

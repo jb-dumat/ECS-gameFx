@@ -1,6 +1,4 @@
-import java.util.Map;
 import java.util.Vector;
-import java.util.stream.StreamSupport;
 
 public class SCommandCheck {
     public static void compute() {
@@ -18,8 +16,9 @@ public class SCommandCheck {
             String commandTag = ((CCommandInput) commandInputs.get(command).toArray()[0]).command;
             Vector<String> args = ((CCommandInput) commandInputs.get(command).toArray()[0]).args;
 
-            if (!cmdPool.contains(commandTag) || args.size() != cmdPool.getValue(commandTag)) {
+            if (!cmdPool.contains(commandTag)) {
                 ecs.removeEntity(command);
+                ecs.attachComponent(new Entity(), new COutDialog("I don't know what you mean..."));
             }
         }
     }

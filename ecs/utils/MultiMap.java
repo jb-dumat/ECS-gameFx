@@ -1,7 +1,7 @@
 import java.util.*;
 
 class MultiMap<K, V> {
-    private Map<K, Collection<V>> map = new HashMap<>();
+    private Map<K, Collection<V>> map = new LinkedHashMap<>();
     /**
      * Add the specified value with the specified key in this multimap.
      */
