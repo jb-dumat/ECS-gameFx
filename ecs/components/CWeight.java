@@ -5,5 +5,5 @@ public class CWeight implements IComponent {
 
     public final String getComponentName() { return this.getClass().getName(); }
 
-    int weight;
+    public int weight;
 }

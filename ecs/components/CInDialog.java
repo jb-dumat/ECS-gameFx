@@ -1,11 +1,7 @@
 public class CInDialog implements IComponent {
-    CInDialog(Entity target) {
-        this.target = target;
-        this.text = null;
-    }
+    CInDialog() { this.input = ""; }
 
     public final String getComponentName() { return this.getClass().getName(); }
 
-    public String text;
-    public Entity target;
+    public String input;
 }

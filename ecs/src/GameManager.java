@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class GameManager {
     }
 
     private void createWelcomeScene() {
-        ecs.put(new Entity(), new COutDialog("Welcome to the world of Zuul!\\nWorld of Zuul is a new, incredibly boring adventure game.\\nType 'help' if you need help.\\n"));
+        ecs.put(new Entity(), new COutDialog("Welcome to the world of Zuul!\nWorld of Zuul is a new, incredibly boring adventure game.\nType 'help' if you need help.\n"));
     }
 
     private void createRooms() {
@@ -80,7 +79,7 @@ public class GameManager {
                 new CPositionString("outside"),
                 new CInventory(),
                 new CStorageCapacity(10),
-                new CInput()
+                new CInDialog()
         );
 
         players.put("player1", player1);
@@ -100,6 +99,18 @@ public class GameManager {
         );
 
         this.items.put("notebook", notebook);
+    }
+
+    Map<String, Entity> getRooms() {
+        return this.rooms;
+    }
+
+    Map<String, Entity> getPlayers() {
+        return this.players;
+    }
+
+    Map<String, Entity> getItems() {
+        return this.items;
     }
 
     EcsManager ecs;
