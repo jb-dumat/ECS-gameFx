@@ -24,7 +24,7 @@ public class EcsManager extends MultiMap<Entity, IComponent> {
         void invoke(Entity entity);
     }
 
-    public void forEachWith(ApplySystem functor, Class... component) {
+    public void forEachIfContains(ApplySystem functor, Class... component) {
         for (Entity entity : this.keySet()) {
             Collection<Class> list = Arrays.asList(component);
             boolean containsAll = false;

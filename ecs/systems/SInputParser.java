@@ -1,13 +1,11 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 public class SInputParser {
     public static void update() {
         EcsManager ecs = EcsManager.getInstance();
 
-        ecs.forEachWith((e) -> {
+        ecs.forEachIfContains((e) -> {
             CInDialog input = (CInDialog) ecs.getComponent(e, CInDialog.class);
 
             if (input == null)

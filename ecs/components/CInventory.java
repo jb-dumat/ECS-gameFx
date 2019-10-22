@@ -9,7 +9,5 @@ public class CInventory implements IComponent {
             this.inventory.addAll(Arrays.asList(entities));
     }
 
-    public final String getComponentName() { return this.getClass().getName(); }
-
     public List<Entity> inventory;
 }

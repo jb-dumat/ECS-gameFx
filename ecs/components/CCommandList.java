@@ -7,7 +7,5 @@ public class CCommandList implements IComponent {
         this.commandList = new ArrayList<>();
     }
 
-    public final String getComponentName() { return this.getClass().getName(); }
-
     public List<Command> commandList;
 }

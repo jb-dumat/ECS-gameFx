@@ -2,7 +2,7 @@ public class SCommandBroker {
     public static void putCommand(Command command) {
         EcsManager ecs = EcsManager.getInstance();
 
-        ecs.forEachWith((e) -> {
+        ecs.forEachIfContains((e) -> {
                     CCommandList cmdList = (CCommandList) ecs.getComponent(e, CCommandList.class);
 
                     cmdList.commandList.add(command);
@@ -15,7 +15,7 @@ public class SCommandBroker {
 
 
 
-        ecs.forEachWith((e) -> {
+        ecs.forEachIfContains((e) -> {
             CCommandList cmdList = (CCommandList) ecs.getComponent(e, CCommandList.class);
 
             for (Command command : cmdList.commandList) {

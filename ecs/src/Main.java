@@ -1,16 +1,15 @@
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
+    public static ExecutorService pool;
 
     public static void launchGame() {
         EcsManager ecs = EcsManager.getInstance();
         SystemManager systemManager = new SystemManager();
         CommandPool cmdPool = CommandPool.getInstance();
-        ExecutorService pool = Executors.newFixedThreadPool(1);
-        GameManager gameManager = GameManager.getInstance();
+        pool = Executors.newFixedThreadPool(1);
+        GameBuilder gameManager = GameBuilder.getInstance();
 
         cmdPool.addCommand("go", 1);
 

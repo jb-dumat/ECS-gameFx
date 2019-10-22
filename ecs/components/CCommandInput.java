@@ -6,8 +6,6 @@ public class CCommandInput implements IComponent {
         this.args = args;
     }
 
-    public final String getComponentName() { return this.getClass().getName(); }
-
     public String command;
     public Vector<String> args;
  }

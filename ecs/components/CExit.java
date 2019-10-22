@@ -6,8 +6,6 @@ public class CExit implements IComponent {
         this.exitID = exitID;
     }
 
-    public String getComponentName() { return this.getClass().getName(); }
-
     public String exitTag;
     public String directionTag;
     public Entity exitID;

@@ -24,10 +24,10 @@ public class SystemManager implements Runnable {
         Clock clock = new Clock();
 
         while (!this.stop) {
-            if (clock.getDuration() > 300) {
-                this.update();
-                clock.restart();
-            }
+//            if (clock.getDuration() > 50) {
+            this.update();
+//                clock.restart();
+//            }
         }
     }
 

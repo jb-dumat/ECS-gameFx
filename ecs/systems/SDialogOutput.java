@@ -6,7 +6,7 @@ public class SDialogOutput {
         EcsManager ecs = EcsManager.getInstance();
         List<Entity> toRemove = new ArrayList<>();
 
-        ecs.forEachWith((e) -> {
+        ecs.forEachIfContains((e) -> {
             System.out.println(((COutDialog) ecs.getComponent(e, COutDialog.class)).text);
             toRemove.add(e);
         },

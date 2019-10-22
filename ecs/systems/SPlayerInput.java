@@ -1,3 +1,4 @@
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class SPlayerInput {
@@ -5,10 +6,18 @@ public class SPlayerInput {
         EcsManager ecs = EcsManager.getInstance();
         Scanner input = new Scanner(System.in);
 
-        ecs.forEachWith((e) -> {
+        ecs.forEachIfContains((e) -> {
             System.out.print("> ");
             CInDialog inDialog = ((CInDialog) ecs.getComponent(e, CInDialog.class));
-            inDialog.input = input.nextLine();
+            inDialog.input = "";
+
+            try {
+                inDialog.input = input.nextLine();
+            } catch (NoSuchElementException ex) {
+                ex.printStackTrace();
+                inDialog.input = "";
+                input.reset();
+            }
             },
                 CInDialog.class
         );
