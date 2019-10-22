@@ -5,8 +5,12 @@ public class SPlayerInput {
         EcsManager ecs = EcsManager.getInstance();
         Scanner input = new Scanner(System.in);
 
-        for (Entity entity : ecs.keySet()) {
-
-        }
+        ecs.forEachWith((e) -> {
+            System.out.print("> ");
+            CInDialog inDialog = ((CInDialog) ecs.getComponent(e, CInDialog.class));
+            inDialog.input = input.nextLine();
+            },
+                CInDialog.class
+        );
     }
 }

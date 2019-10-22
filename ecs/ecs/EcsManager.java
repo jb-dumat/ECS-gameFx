@@ -25,8 +25,6 @@ public class EcsManager extends MultiMap<Entity, IComponent> {
     }
 
     public void forEachWith(ApplySystem functor, Class... component) {
-        Iterator<Map.Entry<Entity, Collection<IComponent>>> iter = this.entrySet().iterator();
-
         for (Entity entity : this.keySet()) {
             Collection<Class> list = Arrays.asList(component);
             boolean containsAll = false;
@@ -135,6 +133,24 @@ public class EcsManager extends MultiMap<Entity, IComponent> {
                     ex.printStackTrace();
                 }
             }
+        }
+        return null;
+    }
+
+    public Entity getEntityWith(Class... components) {
+        for (Entity entity : this.keySet()) {
+            Collection<Class> list = Arrays.asList(components);
+            boolean containsAll = false;
+
+            for (IComponent c : this.get(entity)) {
+                if (list.contains(c.getClass())) {
+                    containsAll = true;
+                    break;
+                }
+            }
+
+            if (containsAll)
+                return entity;
         }
         return null;
     }

@@ -21,9 +21,7 @@ public class SInputParser {
             }
 
             ecs.put(e, new CCommandInput(words[0], wordsVector));
-
-            //System.out.println( ((CCommandInput) ecs.getComponent(e, CCommandInput.class) ).command + " " + ((CCommandInput) ecs.getComponent(e, CCommandInput.class) ).args );
-
+            input.input = "";
            },
                 CInDialog.class);
     }

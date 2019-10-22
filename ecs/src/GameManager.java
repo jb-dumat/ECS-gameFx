@@ -1,3 +1,6 @@
+import javax.script.Invocable;
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,6 +24,9 @@ public class GameManager {
 
         // Create the players
         this.createPlayers();
+
+        // Create the commands schemes
+        this.createCmdSchemes();
     }
 
     private void createWelcomeScene() {
@@ -83,6 +89,8 @@ public class GameManager {
         );
 
         players.put("player1", player1);
+
+        SCommandGo.listUserInfo(this.rooms.get("outside"));
     }
 
     private void createRoomInventory() {
@@ -90,7 +98,6 @@ public class GameManager {
 
         ecs.put(notebook,
                 new CName("Notebook"),
-                new CDescription("A notebook"),
                 new CWeight(2)
         );
 
@@ -99,6 +106,26 @@ public class GameManager {
         );
 
         this.items.put("notebook", notebook);
+    }
+
+    private void createCmdSchemes() {
+        Entity broker = new Entity();
+        Map<String, Constructor<? extends Command>> schemes = new LinkedHashMap<>();
+
+        try {
+            schemes.put("go", SCommandGo.class.getConstructor());
+            ecs.put(broker,
+                    new CCommandSchemes(schemes),
+                    new CCommandList());
+
+            schemes.put("help", SCommandGo.class.getConstructor());
+            ecs.put(broker,
+                    new CCommandSchemes(schemes),
+                    new CCommandList());
+
+        } catch (NoSuchMethodException ex) {
+            ex.printStackTrace();
+        }
     }
 
     Map<String, Entity> getRooms() {
@@ -113,7 +140,7 @@ public class GameManager {
         return this.items;
     }
 
-    EcsManager ecs;
+    private EcsManager ecs;
     private Map<String, Entity> rooms;
     private Map<String, Entity> players;
     private Map<String, Entity> items;

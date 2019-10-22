@@ -4,9 +4,9 @@ public class Entity {
         this.entityID = idGenerator.generateID();
     }
 
-    int getEntityID() {
+    long getEntityID() {
         return this.entityID;
     }
 
-    private int entityID;
+    private long entityID;
 }

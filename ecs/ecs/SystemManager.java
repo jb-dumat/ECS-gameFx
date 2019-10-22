@@ -4,23 +4,20 @@ public class SystemManager implements Runnable {
     }
 
     private void update() {
-        // Parse Input
-        SInputParser.update();
-
-        // Check if command are valid
-        SCommandCheck.update();
-
-        // Compute movements
-        SMovement.update();
-
         // Write all dialogs on output stream
         SDialogOutput.update();
 
         // Starts an input scan
         SPlayerInput.update();
 
-        // Parse command from input
+        // Parse Input
         SInputParser.update();
+
+        // Check if command are valid
+        SCommandCheck.update();
+
+        // Execute commands
+        SCommandBroker.update();
     }
 
     public void run() {

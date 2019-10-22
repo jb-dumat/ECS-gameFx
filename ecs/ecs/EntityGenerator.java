@@ -9,7 +9,7 @@ public class EntityGenerator {
         return new EntityGenerator();
     }
 
-    public int generateID() {
+    public long generateID() {
         if (uniqueID == Integer.MAX_VALUE) {
             // Check for free slot
             // return entityIdFreeSlot;
@@ -18,7 +18,7 @@ public class EntityGenerator {
     }
 
     private static EntityGenerator Instance;
-    private static int uniqueID;
+    private static long uniqueID;
 }
 
 

@@ -12,8 +12,6 @@ public class SDialogOutput {
         },
                 COutDialog.class);
 
-        for (Entity e : toRemove) {
-            ecs.remove(e);
-        }
+        toRemove.forEach(e -> { ecs.remove(e); });
    }
 }
