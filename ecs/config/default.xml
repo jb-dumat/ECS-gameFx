@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Game>
+    <Data>
+        <Room>
+            <CName type="component">outside</CName>
+            <CDescription type="component">outside the main entrance of the university</CDescription>
+            <CExit type="component">
+                <Name>theatre</Name>
+                <Direction>east</Direction>
+            </CExit>
+            <CExit type="component">
+                <Name>lab</Name>
+                <Direction>south</Direction>
+            </CExit>
+            <CExit type="component">
+                <Name>pub</Name>
+                <Direction>west</Direction>
+            </CExit>
+            <CInventory type="component">
+                <Item>
+                    <CName type="component">Notebook</CName>
+                    <CWeight type="component">2</CWeight>
+                </Item>
+            </CInventory>
+        </Room>
+
+        <Room>
+            <CName type="component">theatre</CName>
+            <CDescription type="component">in a lecture theatre</CDescription>
+            <CExit type="component">
+                <Name>outside</Name>
+                <Direction>west</Direction>
+            </CExit>
+            <CInventory type="component"></CInventory>
+        </Room>
+
+        <Room>
+            <CName type="component">pub</CName>
+            <CDescription type="component">in the campus pub</CDescription>
+            <CExit type="component">
+                <Name>outside</Name>
+                <Direction>east</Direction>
+            </CExit>
+            <CInventory type="component"></CInventory>
+        </Room>
+
+        <Room>
+            <CName type="component">lab</CName>
+            <CDescription type="component">in a computing lab</CDescription>
+            <CExit type="component">
+                <Name>outside</Name>
+                <Direction>north</Direction>
+            </CExit>
+            <CExit type="component">
+                <Name>office</Name>
+                <Direction>east</Direction>
+            </CExit>
+            <CInventory type="component"></CInventory>
+        </Room>
+
+        <Room>
+            <CName type="component">office</CName>
+            <CDescription type="component">in the computing admin office</CDescription>
+            <CExit type="component">
+                <Name>lab</Name>
+                <Direction>west</Direction>
+            </CExit>
+            <CInventory type="component"></CInventory>
+        </Room>
+
+        <Player>
+            <CName type="component">player1</CName>
+            <CPosition type="component">outside</CPosition>
+            <CInventory type="component"></CInventory>
+            <CWeight type="component">0</CWeight>
+            <CMaxWeight type="component">10</CMaxWeight>
+            <CInDialog type="component"></CInDialog>
+        </Player>
+    </Data>
+</Game>

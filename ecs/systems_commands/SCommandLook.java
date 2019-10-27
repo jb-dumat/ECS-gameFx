@@ -8,16 +8,18 @@ public class SCommandLook implements Command {
 
         ecs.forEachIfContains(e -> {
 
-            CCommandInput commandInput = (CCommandInput) ecs.getComponent(e, CCommandInput.class);
-            CPositionString positionString = (CPositionString) ecs.getComponent(e, CPositionString.class);
-
+            // Check the validness of the command
+            CCommandInput commandInput = ecs.getComponent(e, CCommandInput.class);
+            CPositionString positionString = ecs.getComponent(e, CPositionString.class);
             if (commandInput == null || positionString == null)
                 return;
 
-            Entity roomEntity = ecs.getEntityByValue(CName.class, "name", positionString.roomTag);
+            // Get the room where the player stands
+            Entity roomEntity = ecs.getEntityByComponentValue(CName.class, "name", positionString.roomTag);
             if (roomEntity == null)
                 return;
 
+            // List all information about the room
             if (commandInput.command.equals("look")) {
                 SCommandGo.listUserInfoConcurrent(roomEntity, toAdd);
                 ecs.remove(e, commandInput);

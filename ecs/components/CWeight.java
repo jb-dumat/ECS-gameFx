@@ -1,6 +1,9 @@
+/**
+ * A weight component
+ */
 public class CWeight implements IComponent {
-    CWeight(int weight) {
-        this.weight = weight;
+    CWeight(String weight) {
+        this.weight = Integer.parseInt(weight);
     }
 
     public int weight;

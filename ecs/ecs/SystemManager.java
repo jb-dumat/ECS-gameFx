@@ -1,37 +1,31 @@
-public class SystemManager implements Runnable {
-    public SystemManager() {
-        stop = false;
-    }
-
-    private void update() {
-        // Write all dialogs on output stream
-        SDialogOutput.update();
-
-        // Starts an input scan
-        SPlayerInput.update();
-
-        // Parse Input
-        SInputParser.update();
-
-        // Check if command are valid
-        SCommandCheck.update();
-
-        // Execute commands
-        SCommandBroker.update();
-    }
-
+/**
+ * The class SystemManager defines the order and which
+ * systems are used by the EcsManager
+ */
+public class SystemManager extends ISystemManager {
+    /**
+     * This method is executed in a threadPool.
+     * All systems are run asynchronously.
+     */
     public void run() {
-        Clock clock = new Clock();
+        while (true) {
+            // Manage all out dialogs and write them on output stream
+            SCliDialogOutput.update();
 
-        while (!this.stop) {
-//            if (clock.getDuration() > 50) {
-            this.update();
-//                clock.restart();
-//            }
+            // Starts an input scan to players who got one
+            SCliPlayerInput.update();
+
+            // Get inputs from all brainless computers.
+            SComputerInput.update();
+
+            // Parse the input scanned
+            SInputParser.update();
+
+            // Check if command are valid
+            SCliCommandCheck.update();
+
+            // Execute commands
+            SCliCommandBroker.update();
         }
     }
-
-    public void setStop() { this.stop = true; }
-
-    private boolean stop;
 }

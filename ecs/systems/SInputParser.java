@@ -1,12 +1,16 @@
 import java.util.Arrays;
 import java.util.Vector;
 
+/**
+ * The SInputParser is a system which
+ * parses all inputs from players.
+ */
 public class SInputParser {
     public static void update() {
         EcsManager ecs = EcsManager.getInstance();
 
         ecs.forEachIfContains((e) -> {
-            CInDialog input = (CInDialog) ecs.getComponent(e, CInDialog.class);
+            CInPlayer input = ecs.getComponent(e, CInPlayer.class);
 
             if (input == null)
                 return;
@@ -21,6 +25,6 @@ public class SInputParser {
             ecs.put(e, new CCommandInput(words[0], wordsVector));
             input.input = "";
            },
-                CInDialog.class);
+                CInPlayer.class);
     }
 }

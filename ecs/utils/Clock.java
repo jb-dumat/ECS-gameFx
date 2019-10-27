@@ -1,3 +1,6 @@
+/**
+ * A simple clock class
+ */
 public class Clock {
     Clock() { this.clock = java.lang.System.currentTimeMillis(); }
 

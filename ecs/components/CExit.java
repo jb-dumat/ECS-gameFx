@@ -1,3 +1,6 @@
+/**
+ * An Exit component.
+ */
 public class CExit implements IComponent {
     CExit(String exitTag, String directionTag, Entity exitID)
     {

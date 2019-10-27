@@ -1,14 +1,19 @@
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class SPlayerInput {
+/**
+ * This system iterates over all entities which
+ * contains an InputComponent and open create a
+ * command from this input.
+ */
+public class SCliPlayerInput {
     public static void update() {
         EcsManager ecs = EcsManager.getInstance();
         Scanner input = new Scanner(System.in);
 
         ecs.forEachIfContains((e) -> {
             System.out.print("> ");
-            CInDialog inDialog = ((CInDialog) ecs.getComponent(e, CInDialog.class));
+            CInPlayer inDialog = (ecs.getComponent(e, CInPlayer.class));
             inDialog.input = "";
 
             try {
@@ -19,7 +24,7 @@ public class SPlayerInput {
                 input.reset();
             }
             },
-                CInDialog.class
+                CInPlayer.class
         );
     }
 }

@@ -1,16 +1,28 @@
 import java.lang.reflect.Constructor;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
-public class GameBuilder {
-    private GameBuilder() {
+/**
+ * The Zuul Bad game builder. It provides a way
+ * to build statically a game.
+ * If you need to change the
+ * way the game is built, you must make another GameBuilder
+ * class which inherits from IGameBuilder.
+ */
+public class GameBuilder implements IGameBuilder {
+
+    /**
+     * Constructs a GameBuilder which uses a unique reference of an EcsManager
+     * @param ecs EcsManager reference
+     */
+    public GameBuilder(EcsManager ecs) {
         this.rooms = new LinkedHashMap<>();
-        this.players = new LinkedHashMap<>();
-        this.items = new LinkedHashMap<>();
-        this.ecs = EcsManager.getInstance();
+        this.ecs = ecs;
     }
 
-    public void generateGame() {
+    /**
+     * Builds statically the game.
+     */
+    public void buildGame() {
         // Create the welcome scene
         this.createWelcomeScene();
 
@@ -21,20 +33,26 @@ public class GameBuilder {
         this.createRoomInventory();
 
         // Create the players
-        this.createPlayers();
+        this.createPlayer();
 
         // Create the commands schemes
         this.createCmdSchemes();
     }
 
+    /**
+     * Creates the "Welcome scene"
+     */
     private void createWelcomeScene() {
         ecs.put(new Entity(), new COutDialog("Welcome to the world of Zuul!\nWorld of Zuul is a new, incredibly boring adventure game.\nType 'help' if you need help.\n"));
     }
 
+    /**
+     * Creates all the rooms
+     */
     private void createRooms() {
         Entity outside = new Entity(), theatre = new Entity(), pub = new Entity(), lab = new Entity(), office = new Entity();
 
-        // Create outside
+        // Create outside room
         ecs.put(outside,
                 new CName("outside"),
                 new CDescription("outside the main entrance of the university"),
@@ -43,6 +61,7 @@ public class GameBuilder {
                 new CExit("pub", "west", pub)
         );
 
+        // Create theatre room
         ecs.put(theatre,
                 new CName("theatre"),
                 new CDescription("in a lecture theatre"),
@@ -50,6 +69,7 @@ public class GameBuilder {
                 new CInventory()
         );
 
+        // Create pub room
         ecs.put(pub,
                 new CName("pub"),
                 new CDescription("in the campus pub"),
@@ -57,6 +77,7 @@ public class GameBuilder {
                 new CInventory()
         );
 
+        // Create lab room
         ecs.put(lab,
                 new CName("lab"),
                 new CDescription("in a computing lab"),
@@ -65,6 +86,7 @@ public class GameBuilder {
                 new CInventory()
         );
 
+        // Create office room
         ecs.put(office,
                 new CName("office"),
                 new CDescription("in the computing admin office"),
@@ -77,40 +99,62 @@ public class GameBuilder {
         rooms.put("pub", pub);
         rooms.put("lab", lab);
         rooms.put("office", office);
+
     }
 
-    private void createPlayers() {
-        Entity player1 = new Entity();
+    /**
+     * Create a new human player.
+     */
+    private void createPlayer() {
+        Entity player1 = new Entity(), player2 = new Entity();
 
+        // Makes the player entity
         ecs.put(player1,
                 new CName("player1"),
                 new CPositionString("outside"),
                 new CInventory(),
-                new CPlayerWeight(0),
-                new CStorageCapacity(10),
-                new CInDialog()
+                new CWeight("0"),
+                new CMaxWeight("10"),
+                new CInPlayer()
         );
 
-        players.put("player1", player1);
+        // Makes the computer entity
+        ecs.put(player2,
+                new CName("player2"),
+                new CPositionString("outside"),
+                new CInventory(),
+                new CWeight("0"),
+                new CMaxWeight("10"),
+                new CComputerLevel(CComputerLevel.Level.BRAINLESS)
+        );
 
         SCommandGo.listUserInfo(this.rooms.get("outside"));
     }
 
+    /**
+     * Initializes the outside room's inventory
+     */
     private void createRoomInventory() {
         Entity notebook = new Entity();
 
+        // Create a new entity Notebook
         ecs.put(notebook,
                 new CName("Notebook"),
-                new CWeight(2)
+                new CWeight("2")
         );
 
+        // Add the Notebook to the outside inventory
         ecs.put(rooms.get("outside"),
                 new CInventory(notebook)
         );
-
-        this.items.put("notebook", notebook);
     }
 
+    /**
+     * This methods makes the commands scheme.
+     * The whole command pattern is handled as an entity by
+     * the ecs manager. This means that each command logic is
+     * processed as a system.
+     */
     private void createCmdSchemes() {
         Entity broker = new Entity();
         Map<String, Constructor<? extends Command>> schemes = new LinkedHashMap<>();
@@ -139,15 +183,4 @@ public class GameBuilder {
 
     private EcsManager ecs;
     private Map<String, Entity> rooms;
-    private Map<String, Entity> players;
-    private Map<String, Entity> items;
-
-    public static GameBuilder getInstance() {
-        if (Instance == null) {
-            Instance = new GameBuilder();
-        }
-        return Instance;
-    }
-
-    private static GameBuilder Instance;
 }

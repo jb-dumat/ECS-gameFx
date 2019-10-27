@@ -8,7 +8,8 @@
       <sourceFolder url="file://$MODULE_DIR$/systems" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/utils" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ecs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/commands" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/systems_commands" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ai" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
