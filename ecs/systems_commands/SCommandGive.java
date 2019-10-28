@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Logger;
 
 public class SCommandGive implements Command {
     /**
@@ -148,34 +149,40 @@ public class SCommandGive implements Command {
         ecs.forEachIfContains(e -> {
                     // Check if command and its args are a "give" valid request.
                     CCommandInput commandInput = ecs.getComponent(e, CCommandInput.class);
-                    if (commandInput == null || commandInput.command == null ||
-                            !commandInput.command.equals("give") || !this.checkCommandArgs(e, commandInput, toAdd))
-                        return;
 
-                    // Check the validness of the other entity (Existence + matching positions).
-                    Entity otherEntity = ecs.getEntityByComponentValue(CName.class, "name", commandInput.args.elementAt(1));
-                    if (!this.checkOtherEntity(otherEntity, e, commandInput, toAdd) || !this.checkPlayersPosition(e, otherEntity, commandInput, toAdd))
-                        return;
+                    try {
+                        if (commandInput == null || commandInput.command == null ||
+                                !commandInput.command.equals("give") || !this.checkCommandArgs(e, commandInput, toAdd))
+                            return;
 
-                    // Check the player's inventory
-                    String itemName = commandInput.args.elementAt(0);
-                    Entity item = ecs.getEntityByComponentValue(CName.class, "name", itemName);
-                    CInventory playerInventory = ecs.getComponent(e, CInventory.class);
-                    if (!this.checkPlayerInventory(item, itemName, playerInventory, toAdd))
-                        return;
+                        // Check the validness of the other entity (Existence + matching positions).
+                        Entity otherEntity = ecs.getEntityByComponentValue(CName.class, "name", commandInput.args.elementAt(1));
+                        if (!this.checkOtherEntity(otherEntity, e, commandInput, toAdd) || !this.checkPlayersPosition(e, otherEntity, commandInput, toAdd))
+                            return;
 
-                    // Check if the other player is able to carry the item
-                    CWeight itemWeight = ecs.getComponent(item, CWeight.class);
-                    CInventory otherInventory = ecs.getComponent(otherEntity, CInventory.class);
-                    CWeight otherWeight = ecs.getComponent(otherEntity, CWeight.class);
-                    CWeight playerWeight = ecs.getComponent(e, CWeight.class);
-                    if (this.checkOtherWeightCapacity(otherEntity, otherInventory, itemWeight, otherWeight, commandInput, toAdd)) {
-                        // Process the "give" command logic
-                        this.giveLogic(item, playerWeight, otherWeight, itemWeight, playerInventory, otherInventory);
+                        // Check the player's inventory
+                        String itemName = commandInput.args.elementAt(0);
+                        Entity item = ecs.getEntityByComponentValue(CName.class, "name", itemName);
+                        CInventory playerInventory = ecs.getComponent(e, CInventory.class);
+                        if (!this.checkPlayerInventory(item, itemName, playerInventory, toAdd))
+                            return;
+
+                        // Check if the other player is able to carry the item
+                        CWeight itemWeight = ecs.getComponent(item, CWeight.class);
+                        CInventory otherInventory = ecs.getComponent(otherEntity, CInventory.class);
+                        CWeight otherWeight = ecs.getComponent(otherEntity, CWeight.class);
+                        CWeight playerWeight = ecs.getComponent(e, CWeight.class);
+                        if (this.checkOtherWeightCapacity(otherEntity, otherInventory, itemWeight, otherWeight, commandInput, toAdd)) {
+                            // Process the "give" command logic
+                            this.giveLogic(item, playerWeight, otherWeight, itemWeight, playerInventory, otherInventory);
+                        }
+
+                        // Remove the command
+                        ecs.remove(e, commandInput);
+                    } catch (Exception ex) {
+                        Logger.getGlobal().warning(ex.getMessage());
+                        ecs.remove(e, commandInput);
                     }
-
-                    // Remove the command
-                    ecs.remove(e, commandInput);
                 },
                 CCommandInput.class,
                 CPositionString.class,

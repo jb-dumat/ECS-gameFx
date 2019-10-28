@@ -1,5 +1,10 @@
 import java.util.*;
 
+/**
+ * Author: https://www.techiedelight.com/implement-multimap-java/
+ * @param <K> Key parameter
+ * @param <V> Value(s)
+ */
 class MultiMap<K, V> {
     private Map<K, Collection<V>> map = new LinkedHashMap<>();
     /**

@@ -1,6 +1,7 @@
 import javafx.util.Pair;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The class EcsManager provides a simple API to build games or applications using
@@ -74,7 +75,7 @@ public class EcsManager extends MultiMap<Entity, IComponent> {
 
             for (IComponent c : this.get(entity)) {
                 for (Class classReq : component) {
-                    if (c.getClass().equals(classReq)) {
+                    if (c != null && c.getClass().equals(classReq)) {
                         matchingComponent++;
                         break;
                     }
@@ -169,7 +170,7 @@ public class EcsManager extends MultiMap<Entity, IComponent> {
                         return new Pair<>(e, (C)c);
                     }
                 } catch (NoSuchFieldException | IllegalAccessException ex) {
-                    ex.printStackTrace();
+                    Logger.getGlobal().warning(ex.getMessage());
                 }
             }
         }
