@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>    
+    <command>
+        <tag>help</tag>
+        <constructor>systems_commands.SCommandHelp</constructor>
+    </command>
+    
+    <command>
+        <tag>quit</tag>
+        <constructor>systems_commands.SCommandQuit</constructor>
+    </command>
+    
+    <command>
+        <tag>go</tag>
+        <constructor>systems_commands.SCommandGo</constructor>
+    </command>
+    
+    <command>
+        <tag>look</tag>
+        <constructor>systems_commands.SCommandLook</constructor>
+    </command>
+    
+    <command>
+        <tag>take</tag>
+        <constructor>systems_commands.SCommandTake</constructor>
+    </command>
+    
+    <command>
+        <tag>drop</tag>
+        <constructor>systems_commands.SCommandDrop</constructor>
+    </command>
+    
+    <command>
+        <tag>give</tag>
+        <constructor>systems_commands.SCommandGive</constructor>
+    </command>
+</root>
